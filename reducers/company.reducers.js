@@ -3,7 +3,7 @@ import {
   FETCH_LIST_COMPANY,
   FETCH_COMPANY,
   UPDATE_COMPANY
-} from 'constant';
+} from '../constant';
 
 const initState = {
 	list_company: [],

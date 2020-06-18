@@ -1,6 +1,6 @@
 import {
   COLLAPSED
-} from 'constant';
+} from '../constant';
 
 const initialState = {
   collapsed: false

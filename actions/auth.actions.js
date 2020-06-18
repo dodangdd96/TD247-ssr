@@ -1,6 +1,6 @@
 import {
   LOGIN_SUCCESS
-} from 'constant';
+} from '../constant';
 
 export const loginSuccess = (accessToken) => (dispatch) => {
   dispatch({

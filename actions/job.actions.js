@@ -6,7 +6,7 @@ import {
   CREATE_JOB_POST,
   UPDATE_JOB_POST,
   FETCH_JOB
-} from 'constant';
+} from '../constant';
   
 export const fetchListJobPost = (accessToken, params = {}) => dispatch => {
   const url = `${API_URL}/job_post?access_token=${accessToken}`

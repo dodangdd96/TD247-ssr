@@ -14,7 +14,7 @@ class CandidateItem extends Component {
   render() {
     return (
       <div style={{ display: 'flex', borderBottom: "1px solid #e9e9e9", paddingBottom: 10  }}>
-				<div className="candidate-content" style={{ display: 'flex', justifyContent: 'space-between', width: "100%" }}>
+				<div className="candidate-content" style={{ display: 'flex', justifyContent: 'space-between', width: "100%", cursor: 'pointer' }}>
           <div style={{ width: '50%' }}>
             <div style={{ fontWeight: 500, color: "#1790d4"}}>
               <Tooltip title="Worker cho công ty">

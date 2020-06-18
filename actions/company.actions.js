@@ -1,11 +1,10 @@
 import axios from 'axios';
 import Notification from 'component/common/Notification.js';
-
 import {
   FETCH_LIST_COMPANY,
   FETCH_COMPANY,
   UPDATE_COMPANY
-} from 'constant';
+} from '../constant';
   
 export const fetchListCompany = (accessToken, params = {}) => dispatch => {
   const url = `${API_URL}/company?access_token=${accessToken}`

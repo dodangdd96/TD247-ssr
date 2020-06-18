@@ -18,7 +18,7 @@ class Manage extends Component {
   render() {
     return (
       <ContainerLayout>
-        <div className="box" style={{ minHeight: 300, marginTop: 15 }}>
+        <div className="box" style={{ minHeight: 300 }}>
           <div className="title">Việc làm đã ứng tuyển mới nhất</div>
         </div>
           <div className="box" style={{  minHeight: 300, marginTop: 15 }}>

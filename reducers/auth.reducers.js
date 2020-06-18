@@ -2,7 +2,7 @@ import update from "immutability-helper";
 import jwtDecode from "jwt-decode";
 import {
   LOGIN_SUCCESS
-} from 'constant';
+} from '../constant';
 
 const initState = { 
   user: {} 

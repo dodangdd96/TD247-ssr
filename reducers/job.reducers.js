@@ -4,7 +4,7 @@ import {
   CREATE_JOB_POST,
   UPDATE_JOB_POST,
   FETCH_JOB
-} from 'constant';
+} from '../constant';
 const initState = {
 	list_jobs: [],
   job: {},

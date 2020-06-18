@@ -1,6 +1,6 @@
 import withRedux from 'next-redux-wrapper';
 import { Provider } from 'react-redux';
-import { initStore } from 'store';
+import { initStore } from '../store';
 import App from 'next/app';
 import './global.scss';
 
