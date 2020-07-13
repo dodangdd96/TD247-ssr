@@ -61,10 +61,12 @@ class Manage extends Component {
 
   onHandleChangeFiles = (which, value) => {
     const { files } = this.state;
+    files[which] = value
     console.log(value)
   }
 
   personalInfomation = () => {
+    const { files } = this.state;
     return (
       <div>
         <div className="title">Thông tin cá nhân</div>
@@ -75,6 +77,7 @@ class Manage extends Component {
               <Input
                 placeholder={"Nhập họ tên"}
                 onChange={e => this.onHandleChangeFiles('full_name', e.target.value)}
+                value={files.full_name}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
@@ -82,6 +85,7 @@ class Manage extends Component {
               <Input
                 placeholder={"Nhập số điện thoại"}
                 onChange={e => this.onHandleChangeFiles('phone_number', e.target.value)}
+                value={files.phone_number}
               />
             </div>
           </div>
@@ -91,6 +95,7 @@ class Manage extends Component {
               <Input 
                 placeholder={"Nhập email"}
                 onChange={e => this.onHandleChangeFiles('email', e.target.value)}
+                value={files.email}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
@@ -106,6 +111,7 @@ class Manage extends Component {
             <Input
               placeholder={"Nhập địa chỉ"}
               onChange={e => this.onHandleChangeFiles('address', e.target.value)}
+              value={files.address}
             />
           </div>
           <div style={{ padding: '10px 0px'}}>
@@ -161,7 +167,8 @@ class Manage extends Component {
                 <div className="title-element">Vị trí/việc làm cần ứng tuyển:</div>
                 <Input 
                   placeholder={"Nhập vị trí"}
-                  onChange={e => this.onHandleChangeFiles('position', e.target.value)} 
+                  onChange={e => this.onHandleChangeFiles('position', e.target.value)}
+                  value={files.position}
                 />
               </div>
               <div className="input-element">
@@ -169,7 +176,8 @@ class Manage extends Component {
                   <Select
                     placeholder={"Chọn số năm"} 
                     style={{ width: "100%" }}
-                    onChange={e => this.onHandleChangeFiles('years_of_experience', e)} 
+                    onChange={e => this.onHandleChangeFiles('years_of_experience', e)}
+                    value={files.years_of_experience}
                   >
                     {yearsOfExperience.map(item => 
                       <Option value={item}>{item}</Option>
@@ -181,7 +189,8 @@ class Manage extends Component {
                 <Select
                   placeholder={"Chọn ngành nghề"}
                   style={{ width: "100%" }}
-                  onChange={e => this.onHandleChangeFiles('caree', e)} 
+                  onChange={e => this.onHandleChangeFiles('caree', e)}
+                  value={files.caree}
                 >
                   {listWork.map(item => 
                     <Option value={item}>{item}</Option>
@@ -193,7 +202,8 @@ class Manage extends Component {
                 <Select
                   placeholder={"Chọn cấp bậc"}
                   style={{ width: "100%" }}
-                  onChange={e => this.onHandleChangeFiles('level', e)} 
+                  onChange={e => this.onHandleChangeFiles('level', e)}
+                  value={files.level}
                 >
                 {level.map(item => 
                     <Option value={item}>{item}</Option>
@@ -206,6 +216,7 @@ class Manage extends Component {
                   placeholder={"Chọn mức lương"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('minimum_wage', e)}
+                  value={files.minimum_wage}
                 >
                   {salaryLevel.map(item => 
                     <Option value={item}>{item}</Option>
@@ -234,6 +245,7 @@ class Manage extends Component {
                   placeholder={"Chọn trình độ"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('academic_level', e)}
+                  value={files.academic_level}
                 >
                   {academicLevel.map(item => 
                     <Option value={item}>{item}</Option>
@@ -246,6 +258,7 @@ class Manage extends Component {
                   placeholder={"Chọn nơi làm việc bạn muốn"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('workplace', e)}
+                  value={files.workplace}
                 >
                   {listPosition.map(item => 
                     <Option value={item}>{item}</Option>
@@ -258,6 +271,7 @@ class Manage extends Component {
                   placeholder={"Chọn loại hình công việc bạn muốn"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('type_of_work', e)}
+                  value={files.type_of_work}
                 >
                   {typeOfWork.map(item => 
                     <Option value={item}>{item}</Option>
@@ -270,6 +284,7 @@ class Manage extends Component {
                   placeholder={"Chọn mức lương bạn muốn"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('salary', e)}
+                  value={files.salary}
                 >
                   {salary.map(item => 
                     <Option value={item}>{item}</Option>
@@ -282,6 +297,7 @@ class Manage extends Component {
                   placeholder={"Chọn mức lương"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('maximun_wage', e)}
+                  value={files.maximun_wage}
                 >
                   {salaryLevel.map(item => 
                     <Option value={item}>{item}</Option>
@@ -293,6 +309,7 @@ class Manage extends Component {
                 <TextArea
                   placeholder="Nhập mô tả"
                   onChange={e => this.onHandleChangeFiles('describe_the_goal', e.target.value)}
+                  value={files.describe_the_goal}
                 />
               </div> 
             </Col>
@@ -313,6 +330,7 @@ class Manage extends Component {
               <Input
                 placeholder={"Nhập tên cơ sở, trung tâm"}
                 onChange={e => this.onHandleChangeFiles('training_places', e.target.value)}
+                value={files.training_places}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
@@ -320,6 +338,7 @@ class Manage extends Component {
               <Input
                 placeholder={"Nhập khoa đào tạo"}
                 onChange={e => this.onHandleChangeFiles('training_department', e.target.value)}
+                value={files.training_department}
               />
             </div>
           </div>
@@ -328,6 +347,7 @@ class Manage extends Component {
             <Input
               placeholder={"VD: Kỹ sư CNTT..."}
               onChange={e => this.onHandleChangeFiles('degree', e.target.value)}
+              value={files.degree}
             />
           </div>
           <div style={{ display: 'flex' }}>
@@ -336,6 +356,7 @@ class Manage extends Component {
               <Input
                 placeholder={"VD: CNTT, Điện tử-viễn thông..."}
                 onChange={e => this.onHandleChangeFiles('specialized', e.target.value)}
+                value={files.specialized}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
@@ -344,6 +365,7 @@ class Manage extends Component {
                 placeholder={"Chọn"}
                 style={{ width: "100%" }}
                 onChange={e => this.onHandleChangeFiles('classification', e)}
+                value={files.classification}
               >
                 <Option value="Trung bình">Trung bình</Option>
                 <Option value="Khá">Khá</Option>
@@ -372,6 +394,7 @@ class Manage extends Component {
             <div className="title-element">Thông tin bổ sung:</div>
             <TextArea
               onChange={e => this.onHandleChangeFiles('additional_information', e.target.value)}
+              value={files.additional_information}
             />
           </div> 
         </div>
@@ -389,6 +412,7 @@ class Manage extends Component {
             <Input
               placeholder={"Nhập chức danh"}
               onChange={e => this.onHandleChangeFiles('comapny_position', e.target.value)}
+              value={files.comapny_position}
             />
           </div>
           <div className="input-element">
@@ -396,6 +420,7 @@ class Manage extends Component {
             <Input
               placeholder={"Nhập tên công ty"}
               onChange={e => this.onHandleChangeFiles('comapny', e.target.value)}
+              value={files.comapny}
             />
           </div>
           <div style={{ display: 'flex' }}>
@@ -417,6 +442,7 @@ class Manage extends Component {
           <Checkbox
             style={{ fontWeight: 500 }}
             onChange={e => this.onHandleChangeFiles('current_work', e)}
+            value={files.current_work}
           >
             Công việc hiện tại
           </Checkbox>
@@ -425,6 +451,7 @@ class Manage extends Component {
             <TextArea
               placeholder="Nhập mô tả"
               onChange={e => this.onHandleChangeFiles('work_description', e.target.value)}
+              value={files.work_description}
             />
           </div> 
         </div>
@@ -443,6 +470,7 @@ class Manage extends Component {
             <TextArea
               placeholder="Nhập kỹ năng chuyên môn"
               onChange={e => this.onHandleChangeFiles('advanced_skill_note', e.target.value)}
+              value={files.advanced_skill_note}
             />
           </div> 
           <div>
@@ -450,6 +478,7 @@ class Manage extends Component {
               <CheckboxGroup
                 style={{ display: 'grid', flex: 1 }}
                 onChange={e => this.onHandleChangeFiles('advanced_skill', e.target.value)}
+                value={files.advanced_skill}
               >
                 <Checkbox style={{ marginLeft: 8 }} value="0">Kỹ năng tổ chức</Checkbox>
                 <Checkbox value="1">Kỹ năng giao tiếp</Checkbox>
@@ -498,6 +527,7 @@ class Manage extends Component {
                 <Select
                   placeholder={"Chọn"} style={{ width: "40%" }}
                   onChange={e => this.onHandleChangeFiles('language_skills', e.target.value)}
+                  value={files.language_skills}
                 >
                   {levelSkill.map(item => 
                     <Option value={item}>{item}</Option>

@@ -3,11 +3,17 @@ import {
   FETCH_JOB_POST,
   CREATE_JOB_POST,
   UPDATE_JOB_POST,
-  FETCH_JOB
+  FETCH_JOB,
+  FETCH_LIST_SAVED_JOB,
+  CREATE_SAVED_JOB,
+  FETCH_LIST_APPLIED,
+  CREATE_APPLIED
 } from '../constant';
 const initState = {
 	list_jobs: [],
   job: {},
+  saved_job: [],
+  applied: []
  };
 
 export default (state = initState, action) => {
@@ -20,8 +26,20 @@ export default (state = initState, action) => {
       return update(state, {
         job: { $set: action.payload },
       });
+    case FETCH_LIST_SAVED_JOB:
+      return update(state, {
+        saved_job: { $set: action.payload },
+      });
+    case FETCH_LIST_APPLIED:
+      return update(state, {
+        applied: { $set: action.payload },
+      });
     case UPDATE_JOB_POST:
       return update( state, { job: { $set: action.payload } } );
+    case CREATE_SAVED_JOB:
+      return update( state, { saved_job: { $set: action.payload } } );
+    case CREATE_APPLIED:
+      return update( state, { applied: { $set: action.payload } } );
     case CREATE_JOB_POST:
       return update( state, { job: { $set: action.payload } } );
     default:

@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { Tooltip } from 'antd';
 import { DollarCircleOutlined, FieldTimeOutlined } from '@ant-design/icons';
+import Router from 'next/router';
 
 class WorkItem extends Component {
   constructor(props) {
@@ -11,6 +12,10 @@ class WorkItem extends Component {
     }
   }
 
+  onRowClick = (id) => {
+    Router.push(`/recruitment/info?id=${id}`)
+  }
+
   render() {
     return (
       <div className="job-item">
@@ -18,7 +23,7 @@ class WorkItem extends Component {
 					<img src="/img/Thiet ke hinh anh san pham chuan.png" width={65} height={65}></img>
 				</div>
 				<div className="job-content">
-					<div className="job-title">
+					<div className="job-title" onClick={() => this.onRowClick(this.props.jobId)}>
 						<Tooltip title="Hot job cho ngày mới năng động">
 							Hot job cho ngày mới năng động
 						</Tooltip>

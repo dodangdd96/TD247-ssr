@@ -47,7 +47,7 @@ class Post extends Component {
   render() {
     const yearsOfExperience = ["Chưa có kinh nghiệm", "1 năm", "2 năm", "3 năm", "4 năm", "5 năm", "6 năm", "7 năm", "8 năm", "9 năm", "10 năm"];
     const academicLevel = ["Đại học", "Tất cả trình độ", "Lao động phổ thông Trung học", "Trung cấp", "Cao đẳng", "Kỹ sư", "Cử nhân", "Thạc sĩ", "Tiến sĩ", "Khác"];
-    const salaryLevel = ["1-2 triệu", "2-4 triệu","4-7 triệu","7-10 triệu","10-13 triệu","12-16 triệu","16-20 triệu","20-25 triệu","25-30 triệu","30-40 triệu","40-50 triệu"];
+    const salaryLevel = ["1 triệu - 2 triệu", "2 triệu - 4 triệu","4 triệu - 7 triệu","7 triệu - 10 triệu","10 triệu - 13 triệu","12-16 triệu","16-20 triệu","20-25 triệu","25-30 triệu","30-40 triệu","40-50 triệu"];
     const level = ["Mới tốt nghiệp / Thực tập sinh", "Nhân viên", "Trưởng nhóm", "Trưởng phòng", "Phó giám đốc", "Giám đốc", "Tổng giám đốc điều hành", "Khác"];
     const typeOfWork = ["Toàn thời gian cố định", "Toàn thời gian tạm thời", "Bán thời gian cố định", "Bán thời gian tạm thời", "Theo hợp đồng / tư vấn", "Thực tập", "Khác"];
 

@@ -1,14 +1,24 @@
 import { Component } from 'react';
-import { Form, Input, Button, Select, Row, Col } from 'antd';
+import { Input, Button, Select, Row, Col } from 'antd';
 import levera from '../hocs/whoami';
 import { SearchOutlined, RocketOutlined } from '@ant-design/icons';
 import WorkItem from 'component/WorkItem';
 import Analytic from 'component/Analytic';
 import Footer from 'component/Footer';
 import { listWork, listPosition } from 'tools';
+import { fetchListJobPost } from 'actions';
+import { connect } from 'react-redux';
 
 const Option = Select.Option
 class Home extends Component {
+  static async getInitialProps(ctx, accessToken) {
+    let { isServer, store: { dispatch } } = ctx;
+    if (isServer) {
+      await dispatch(fetchListJobPost(accessToken, {}));
+    } else {
+      await dispatch(fetchListJobPost(accessToken, {}));
+    }
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -52,7 +62,6 @@ class Home extends Component {
               <div style={{ marginRight: 20 }}>Bất động sản</div>
               <div style={{ marginRight: 20 }}>Nhân viên kinh doanh</div>
               <div style={{ marginRight: 20 }}>Kế toán-kiểm toán</div>
-              <div>Công ty</div>
             </div>
           </div>
           <div className="box" style={{ height: 300, marginTop: 15 }}>
@@ -89,4 +98,10 @@ class Home extends Component {
     );
   }
 }
-export default levera(Home);
+
+const mapStateToProps = ({ user }) => ({
+  user: user.user,
+  accessToken: user.accessToken
+});
+
+export default connect(mapStateToProps, { fetchListJobPost })(levera(Home));

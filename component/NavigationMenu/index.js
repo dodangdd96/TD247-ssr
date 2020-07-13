@@ -80,12 +80,12 @@ class NavigationMenu extends Component {
             }
           >
             <MenuItem key="/jobs/applied">
-              <Link href={"/jobs/applied"}>
+              <Link href={`/jobs/applied?userId=${user.id}`}>
                 <a>Việc làm đã ứng tuyển</a>
               </Link>
             </MenuItem>
             <MenuItem key="/jobs/saved">
-              <Link href={"/jobs/saved"}>
+              <Link href={`/jobs/saved?userId=${user.id}`}>
                 <a>Việc làm đã lưu</a>
               </Link>
             </MenuItem>
@@ -125,7 +125,7 @@ class NavigationMenu extends Component {
               </Link>
             </MenuItem>
             <MenuItem key="/employer-recruitment/saved">
-              <Link href={"/employer-recruitment/saved"}>
+              <Link href={`/employer-recruitment/saved?userId=${user.id}`}>
                 <a>Tất cả tin tuyển dụng</a>
               </Link>
             </MenuItem>
@@ -140,18 +140,18 @@ class NavigationMenu extends Component {
             }
           >
             <MenuItem key="/files-manage/saved">
-              <Link href={"/files-manage/saved"}>
+              <Link href={`/files-manage/saved?userId=${user.id}`}>
                 <a>Hồ sơ đã lưu</a>
               </Link>
             </MenuItem>
             <MenuItem key="/files-manage/recruitment">
-              <Link href={"/files-manage/recruitment"}>
+              <Link href={`/files-manage/recruitment?userId=${user.id}`}>
                 <a>Hồ sơ ứng tuyển</a>
               </Link>
             </MenuItem>
           </SubMenu>
           <MenuItem key="/company-profile">
-            <Link href={"/company-profile"}>
+            <Link href={`/company-profile?userId=${user.id}`}>
               <a>
               <HomeOutlined />
   				    <span>Thông tin công ty</span>

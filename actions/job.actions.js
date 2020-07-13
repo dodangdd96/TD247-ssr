@@ -5,7 +5,11 @@ import {
   FETCH_JOB_POST,
   CREATE_JOB_POST,
   UPDATE_JOB_POST,
-  FETCH_JOB
+  FETCH_JOB,
+  FETCH_LIST_SAVED_JOB,
+  CREATE_SAVED_JOB,
+  FETCH_LIST_APPLIED,
+  CREATE_APPLIED
 } from '../constant';
   
 export const fetchListJobPost = (accessToken, params = {}) => dispatch => {
@@ -65,7 +69,7 @@ export const createJobPost = (accessToken, job_post) => dispatch => {
 export const updateJobPost = (accessToken, job_post) => dispatch => {
   const url = `${API_URL}/job_post/${job_post.id}?access_token=${accessToken}`
 
-  return axios.post(url, { job_post } )
+  return axios.put(url, { job_post } )
     .then(res => {
       if (res.data.success) {
         dispatch({
@@ -73,6 +77,78 @@ export const updateJobPost = (accessToken, job_post) => dispatch => {
           payload: res.data.data
         })
         Notification.success("Cập nhật tin thành công");
+        return res.data.data
+      }
+    })
+    .catch(err =>
+      console.log(err)
+    )
+}
+
+export const fetchListSavedJob = (accessToken, params = {}) => dispatch => {
+  const url = `${API_URL}/saved_job?access_token=${accessToken}`
+  return axios.get(url, { params })
+    .then(res => {
+      if (res.data.success) {
+        dispatch({
+          type: FETCH_LIST_SAVED_JOB,
+          payload: res.data.data
+        })
+        return res.data.data
+      }
+    })
+    .catch(err =>
+      console.log(err)
+    )
+}
+
+export const createSavedJob = (accessToken, saved_job) => dispatch => {
+  const url = `${API_URL}/saved_job?access_token=${accessToken}`
+
+  return axios.post(url, { saved_job })
+    .then(res => {
+      if (res.data.success) {
+        dispatch({
+          type: CREATE_SAVED_JOB,
+          payload: res.data.data
+        })
+        Notification.success("Lưu thông tin thành công");
+        return res.data.data
+      }
+    })
+    .catch(err =>
+      console.log(err)
+    )
+}
+
+export const fetchListApplied = (accessToken, params = {}) => dispatch => {
+  const url = `${API_URL}/applied?access_token=${accessToken}`
+  return axios.get(url, { params })
+    .then(res => {
+      if (res.data.success) {
+        dispatch({
+          type: FETCH_LIST_APPLIED,
+          payload: res.data.data
+        })
+        return res.data.data
+      }
+    })
+    .catch(err =>
+      console.log(err)
+    )
+}
+
+export const createApplied = (accessToken, saved_job) => dispatch => {
+  const url = `${API_URL}/applied?access_token=${accessToken}`
+
+  return axios.post(url, { saved_job })
+    .then(res => {
+      if (res.data.success) {
+        dispatch({
+          type: CREATE_APPLIED,
+          payload: res.data.data
+        })
+        Notification.success("Ứng tuyển thành công");
         return res.data.data
       }
     })

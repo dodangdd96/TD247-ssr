@@ -44,7 +44,7 @@ class FileSaved extends Component {
       className: 'align-center-column'
     },
     {
-      title: 'Ghi chứ',
+      title: 'Ghi chú',
       dataIndex: 'province',
       width: '20%',
       className: 'align-center-column'
