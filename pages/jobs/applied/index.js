@@ -4,7 +4,7 @@ import levera from 'hocs/whoami';
 import ContainerLayout from 'layout/ContainerLayout';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { fetchListJobPost } from 'actions';
+import { fetchListApplied } from 'actions';
 import { formatDateTime } from 'tools';
 
 const { RangePicker } = DatePicker;
@@ -14,6 +14,14 @@ const defaultParams = {
   endDate: undefined,
 }
 class Applied extends Component {
+  static async getInitialProps(ctx, accessToken) {
+    let { isServer, store: { dispatch }, query } = ctx;
+    if (isServer) {
+      await dispatch(fetchListApplied(accessToken, query.userId, {}));
+    } else {
+      await dispatch(fetchListApplied(accessToken, query.userId, {}));
+    }
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -142,4 +150,4 @@ const mapStateToProps = ({ user }) => ({
   accessToken: user.accessToken
 });
 
-export default connect(mapStateToProps, { fetchListJobPost })(levera(Applied));
+export default connect(mapStateToProps, { fetchListApplied })(levera(Applied));

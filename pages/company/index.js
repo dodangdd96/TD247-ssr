@@ -38,7 +38,6 @@ class Comapny extends Component {
 
   render() {
     const { listCompany } = this.props;
-    console.log(listCompany)
     return (
       <div className="landing-page-container">
         <div className="filter-adv">

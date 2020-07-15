@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const getUserFromRequest = req => {
   if (req) return req.user;
   const dataToShow = localStorage.getItem('current_user');
@@ -10,7 +12,7 @@ export const formatDateTime = (timezone, time, full, format) => {
   let timeAndZone = typeof time === 'number' ? moment(time, 'X') : moment.utc(time);
   timeAndZone = timezone ? timeAndZone.utcOffset(parseFloat(timezone)) : timeAndZone;
 
-  if (full) return moment(timeAndZone).format('HH:mm DD/MM/YYYY');
+  if (full) return moment(timeAndZone).format('DD/MM/YYYY');
   if (format) return moment(timeAndZone).format(format);
   return moment(timeAndZone).calendar(null, {
     sameDay: 'HH:mm',

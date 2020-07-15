@@ -7,7 +7,8 @@ import {
   FETCH_LIST_SAVED_JOB,
   CREATE_SAVED_JOB,
   FETCH_LIST_APPLIED,
-  CREATE_APPLIED
+  CREATE_APPLIED,
+  CLEAR_JOB
 } from '../constant';
 const initState = {
 	list_jobs: [],
@@ -42,6 +43,8 @@ export default (state = initState, action) => {
       return update( state, { applied: { $set: action.payload } } );
     case CREATE_JOB_POST:
       return update( state, { job: { $set: action.payload } } );
+    case CLEAR_JOB:
+      return update( state, { job: { $set: {} } } );
     default:
       return state;
   }

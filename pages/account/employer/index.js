@@ -5,6 +5,7 @@ import axios from 'axios';
 import { UserOutlined, LockOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
 import { listWork, listPosition } from 'tools';
+import Notification from 'component/common/Notification.js';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -27,21 +28,24 @@ class Account extends Component {
       Cookies.set('login_jwt', res.data.token);
       let user = {
         accessToken: res.data.token,
-        name: res.data.account.user_name,
-        uid: res.data.account.id
+        user_name: res.data.account.user_name,
+        id: res.data.account.id,
+        email: res.data.account.email,
+        role: res.data.account.role,
+        phone_number: res.data.account.phone_number
       }
       const dataToSave = JSON.stringify(user);
       localStorage.setItem('current_user', dataToSave);
-      window.location.replace('/manage');
+      window.location.replace('/employer-manage');
     } else {
       this.setState({ loading: false });
-      message.error(res.data.message || 'Lỗi không xác định');
+      Notification.error(res.data.message || 'Lỗi không xác định');
     }
   };
 
   handleErr = (err) => {
     this.setState({ loading: false });
-    message.error('Lỗi không xác định');
+    Notification.error('Lỗi không xác định');
     console.log(err)
   };
 
@@ -162,16 +166,16 @@ class Account extends Component {
             <Form.Item name="company_name" rules={[{ required: true, message: 'Tên công ty không được để trống!' }]}>
               <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Tên công ty" />
             </Form.Item>
+            <Form.Item name="company_address" rules={[{ required: true, message: 'Địa chỉ công ty không được để trống!' }]}>
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Địa chỉ công ty" />
+            </Form.Item>
             <Form.Item name="personnel_scale" rules={[{ required: true, message: 'Quy mô nhân sự không được để trống!' }]}>
-              <Select placeholder="Tỉnh/thành phố">
+              <Select placeholder="Quy mô nhân sự">
                 {listPersonnelScale.map(item => (
                   <Option value={item}>{item}</Option>
                 ))}
               </Select>
-            </Form.Item>
-            <Form.Item name="company_address" rules={[{ required: true, message: 'Địa chỉ công ty không được để trống!' }]}>
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Địa chỉ công ty" />
-            </Form.Item>            
+            </Form.Item>           
             <Form.Item name="province" rules={[{ required: true, message: 'Tỉnh/Thành phố không được để trống!' }]}>
               <Select placeholder="Tỉnh/thành phố">
               {listPosition.map(item => (

@@ -6,7 +6,7 @@ import WorkItem from 'component/WorkItem';
 import Analytic from 'component/Analytic';
 import Footer from 'component/Footer';
 import { listWork, listPosition } from 'tools';
-import { fetchListJobPost } from 'actions';
+import { fetchListJobPost, createSavedJob, createApplied } from 'actions';
 import { connect } from 'react-redux';
 
 const Option = Select.Option
@@ -31,6 +31,7 @@ class Recruitment extends Component {
   };
 
   render() {
+    const { listJobs } = this.props; 
     return (
       <div className="landing-page-container">
         <div className="filter-adv">
@@ -56,9 +57,11 @@ class Recruitment extends Component {
         <div className="content-landing">
           <div className="box" style={{ height: 300, marginTop: 15 }}>
             <div className="title"><RocketOutlined style={{ marginRight: 5}} />TUYỂN DỤNG NHANH</div>
-            <div style={{ padding: 8}}>
-              <WorkItem/>
-            </div>
+            {listJobs.map((job, index) => (
+              <div style={{ padding: 8}}>
+                <WorkItem job={job} key={index}/>
+              </div>
+            ))}
           </div>
           <div className="box" style={{ height: 600, marginTop: 15 }}>
           <div className="title"><RocketOutlined style={{ marginRight: 5}} />TUYỂN DỤNG HẤP DẪN</div>
@@ -79,12 +82,12 @@ class Recruitment extends Component {
   }
 }
 
-const mapStateToProps = ({ user, company }) => ({
+const mapStateToProps = ({ user, jobs }) => ({
   user: user.user,
   accessToken: user.accessToken,
-  listCompany: company.list_company
+  listJobs: jobs.list_jobs
 });
 
 export default connect(
   mapStateToProps,
-  { fetchListJobPost })(levera(Recruitment));
+  { fetchListJobPost, createSavedJob, createApplied })(levera(Recruitment));

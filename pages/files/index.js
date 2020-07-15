@@ -4,6 +4,9 @@ import levera from 'hocs/whoami';
 import { listWork, listPosition } from 'tools';
 import ContainerLayout from 'layout/ContainerLayout';
 import { LeftOutlined, SafetyOutlined } from '@ant-design/icons';
+import { fetchFileByUser, updateFile } from 'actions';
+import { connect } from 'react-redux';
+import moment from 'moment';
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -11,14 +14,22 @@ const { Step } = Steps;
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 
-class Manage extends Component {
+class File extends Component {
+  static async getInitialProps(ctx, accessToken) {
+    let { isServer, store: { dispatch }, query } = ctx;
+    if (isServer) {
+      await dispatch(fetchFileByUser(accessToken, query.userId));
+    } else {
+      await dispatch(fetchFileByUser(accessToken, query.userId));
+    }
+  }
   constructor(props) {
     super(props);
 
     this.state = {
       visible: false,
       current: 0,
-      files: {}
+      files: props.file || {}
     }
   }
 
@@ -27,8 +38,13 @@ class Manage extends Component {
   };
 
   nextStep() {
-    const current = this.state.current + 1;
-    this.setState({ current });
+    const { updateFile, accessToken } = this.props;
+    const { files } = this.state;
+    updateFile(accessToken, files)
+    if (this.state.current < 4) {
+      const current = this.state.current + 1;
+      this.setState({ current });
+    }
   }
 
   prevStep() {
@@ -61,12 +77,19 @@ class Manage extends Component {
 
   onHandleChangeFiles = (which, value) => {
     const { files } = this.state;
-    files[which] = value
-    console.log(value)
+    files[which] = value;
+    this.setState({ files })
+  }
+
+  onChangeDate = (date, dateString, which) => {
+    const { files } = this.state;
+    files[which] = date
+    this.setState({ files })
   }
 
   personalInfomation = () => {
     const { files } = this.state;
+    console.log(files)
     return (
       <div>
         <div className="title">Thông tin cá nhân</div>
@@ -103,6 +126,11 @@ class Manage extends Component {
               <DatePicker 
                 placeholder="Chọn ngày sinh" 
                 style={{ width: "100%" }}
+                format="DD/MM/YYYY"
+                value={files.date_of_birth ? moment(files.date_of_birth) : undefined}
+                onChange={(date, dateString) => this.onChangeDate(date, dateString, "date_of_birth")}
+                disabledDate={current => current && current > moment().endOf('day')}
+                defaultPickerValue={moment().add(-25, 'years')}
               />
             </div>
           </div>
@@ -117,7 +145,7 @@ class Manage extends Component {
           <div style={{ padding: '10px 0px'}}>
             <span style={{ marginRight: 10, fontWeight: 500 }}>Giới tính:</span>
             <RadioGroup
-             value="Nam"
+             value={files.sex}
              onChange={e => this.onHandleChangeFiles('sex', e.target.value)}
              >
               <Radio value={"Nam"}>
@@ -134,7 +162,7 @@ class Manage extends Component {
           <div>
             <span style={{ marginRight: 10, fontWeight: 500 }}>Tình trạng hôn nhân:</span>
             <RadioGroup
-              value="Độc thân"
+              value={files.marital_status}
               onChange={e => this.onHandleChangeFiles('marital_status', e.target.value)} 
             >
               <Radio value={"Độc thân"}>
@@ -151,6 +179,8 @@ class Manage extends Component {
   }
 
   profileInfomation = () => {
+    const { files } = this.state;
+    console.log(files.career)
     const yearsOfExperience = ["Chưa có kinh nghiệm", "1 năm", "2 năm", "3 năm", "4 năm", "5 năm", "6 năm", "7 năm", "8 năm", "9 năm", "10 năm"];
     const level = ["Mới tốt nghiệp / Thực tập sinh", "Nhân viên", "Trưởng nhóm", "Trưởng phòng", "Phó giám đốc", "Giám đốc", "Tổng giám đốc điều hành", "Khác"];
     const salaryLevel = ["1 triệu", "2 triệu","3 triệu","4 triệu","5 triệu","6 triệu","7 triệu","8 triệu","9 triệu","10 triệu","11 triệu","12 triệu","13 triệu","14 triệu","15 triệu"];
@@ -168,7 +198,7 @@ class Manage extends Component {
                 <Input 
                   placeholder={"Nhập vị trí"}
                   onChange={e => this.onHandleChangeFiles('position', e.target.value)}
-                  value={files.position}
+                  value={files.position || undefined}
                 />
               </div>
               <div className="input-element">
@@ -177,7 +207,7 @@ class Manage extends Component {
                     placeholder={"Chọn số năm"} 
                     style={{ width: "100%" }}
                     onChange={e => this.onHandleChangeFiles('years_of_experience', e)}
-                    value={files.years_of_experience}
+                    value={files.years_of_experience || undefined}
                   >
                     {yearsOfExperience.map(item => 
                       <Option value={item}>{item}</Option>
@@ -189,8 +219,8 @@ class Manage extends Component {
                 <Select
                   placeholder={"Chọn ngành nghề"}
                   style={{ width: "100%" }}
-                  onChange={e => this.onHandleChangeFiles('caree', e)}
-                  value={files.caree}
+                  onChange={e => this.onHandleChangeFiles('career', e)}
+                  value={files.career || undefined}
                 >
                   {listWork.map(item => 
                     <Option value={item}>{item}</Option>
@@ -203,7 +233,7 @@ class Manage extends Component {
                   placeholder={"Chọn cấp bậc"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('level', e)}
-                  value={files.level}
+                  value={files.level || undefined}
                 >
                 {level.map(item => 
                     <Option value={item}>{item}</Option>
@@ -216,7 +246,7 @@ class Manage extends Component {
                   placeholder={"Chọn mức lương"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('minimum_wage', e)}
-                  value={files.minimum_wage}
+                  value={files.minimum_wage || undefined}
                 >
                   {salaryLevel.map(item => 
                     <Option value={item}>{item}</Option>
@@ -229,6 +259,7 @@ class Manage extends Component {
                   <CheckboxGroup
                     style={{ display: 'grid' }}
                     onChange={e => this.onHandleChangeFiles('career_goals', e)}
+                    value={files.career_goals}
                   >
                     <Checkbox style={{ marginLeft: 8 }} value="0">Mong muốn tìm được nơi làm việc lâu dài</Checkbox>
                     <Checkbox value="1">Mong muốn tìm được nơi làm việc có cơ hội thăng tiến tốt</Checkbox>
@@ -245,7 +276,7 @@ class Manage extends Component {
                   placeholder={"Chọn trình độ"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('academic_level', e)}
-                  value={files.academic_level}
+                  value={files.academic_level || undefined}
                 >
                   {academicLevel.map(item => 
                     <Option value={item}>{item}</Option>
@@ -258,7 +289,7 @@ class Manage extends Component {
                   placeholder={"Chọn nơi làm việc bạn muốn"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleChangeFiles('workplace', e)}
-                  value={files.workplace}
+                  value={files.workplace || undefined}
                 >
                   {listPosition.map(item => 
                     <Option value={item}>{item}</Option>
@@ -309,7 +340,7 @@ class Manage extends Component {
                 <TextArea
                   placeholder="Nhập mô tả"
                   onChange={e => this.onHandleChangeFiles('describe_the_goal', e.target.value)}
-                  value={files.describe_the_goal}
+                  value={files.describe_the_goal || undefined}
                 />
               </div> 
             </Col>
@@ -320,6 +351,8 @@ class Manage extends Component {
   }
 
   academicDegree = () => {
+    const { files } = this.state;
+
     return (
       <div>
         <div className="title">Học vấn bằng cấp</div>
@@ -330,7 +363,7 @@ class Manage extends Component {
               <Input
                 placeholder={"Nhập tên cơ sở, trung tâm"}
                 onChange={e => this.onHandleChangeFiles('training_places', e.target.value)}
-                value={files.training_places}
+                value={files.training_places || undefined}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
@@ -365,7 +398,7 @@ class Manage extends Component {
                 placeholder={"Chọn"}
                 style={{ width: "100%" }}
                 onChange={e => this.onHandleChangeFiles('classification', e)}
-                value={files.classification}
+                value={files.classification || undefined}
               >
                 <Option value="Trung bình">Trung bình</Option>
                 <Option value="Khá">Khá</Option>
@@ -378,15 +411,21 @@ class Manage extends Component {
             <div className="input-element" style={{ flex: 1 }}>
               <div className="title-element">Thời gian bắt đầu học:</div>
               <DatePicker
-                placeholder="Chọn ngày sinh"
+                placeholder="Chọn thời gian"
                 style={{ width: "100%" }}
+                format="DD/MM/YYYY"
+                value={files.time_to_start_learning ? moment(files.time_to_start_learning) : undefined}
+                onChange={(date, dateString) => this.onChangeDate(date, dateString, "time_to_start_learning")}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
               <div className="title-element">Thời gian kết thúc học:</div>
               <DatePicker
-                placeholder="Chọn ngày sinh"
+                placeholder="Chọn thời gian"
                 style={{ width: "100%" }}
+                format="DD/MM/YYYY"
+                value={files.time_to_end_learning ? moment(files.time_to_end_learning) : undefined}
+                onChange={(date, dateString) => this.onChangeDate(date, dateString, "time_to_end_learning")}
               />
             </div>
           </div>
@@ -403,6 +442,8 @@ class Manage extends Component {
   }
 
   workExperience = () => {
+    const { files } = this.state;
+
     return (
       <div>
         <div className="title">Kinh nghiệm làm việc</div>
@@ -420,28 +461,34 @@ class Manage extends Component {
             <Input
               placeholder={"Nhập tên công ty"}
               onChange={e => this.onHandleChangeFiles('comapny', e.target.value)}
-              value={files.comapny}
+              value={files.comapny || undefined}
             />
           </div>
           <div style={{ display: 'flex' }}>
             <div className="input-element" style={{ flex: 1 }}>
               <div className="title-element">Thời gian bắt đầu:</div>
               <DatePicker
-                placeholder="Chọn ngày sinh"
+                placeholder="Chọn thời gian"
                 style={{ width: '100%' }}
+                format="DD/MM/YYYY"
+                value={files.time_to_start_work ? moment(files.time_to_start_work) : undefined}
+                onChange={(date, dateString) => this.onChangeDate(date, dateString, "time_to_start_work")}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
               <div className="title-element">Thời gian kết thúc:</div>
               <DatePicker
-                placeholder="Chọn ngày sinh"
-                style={{ width: '100%' }} 
+                placeholder="Chọn thời gian"
+                style={{ width: '100%' }}
+                format="DD/MM/YYYY"
+                value={files.time_to_end_work ? moment(files.time_to_end_work) : undefined}
+                onChange={(date, dateString) => this.onChangeDate(date, dateString, "time_to_end_work")}
               />
             </div>
           </div>
           <Checkbox
             style={{ fontWeight: 500 }}
-            onChange={e => this.onHandleChangeFiles('current_work', e)}
+            onChange={check => this.onHandleChangeFiles('current_work', e.target.checked)}
             value={files.current_work}
           >
             Công việc hiện tại
@@ -461,6 +508,8 @@ class Manage extends Component {
 
   skill = () => {
     const levelSkill = ["Sơ cấp", "Trung cấp", "Cao cấp", "Bản ngữ"]
+    const { files } = this.state;
+
     return (
       <div>
         <div className="title">Kỹ năng</div>
@@ -613,7 +662,7 @@ class Manage extends Component {
                 Quay lại
               </Button>
             )}
-            {current < this.steps.length - 1 && (
+            {current < this.steps.length && (
               <Button icon={<SafetyOutlined />} type="primary" onClick={() => this.nextStep()}>
                 Cập nhật
               </Button>
@@ -624,4 +673,13 @@ class Manage extends Component {
     );
   }
 }
-export default levera(Manage);
+
+const mapStateToProps = ({ user, file }) => ({
+  user: user.user,
+  accessToken: user.accessToken,
+  file: file.file
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchFileByUser, updateFile })(levera(File));

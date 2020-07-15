@@ -438,6 +438,7 @@ body {
   transition: -webkit-box-shadow .2s;
   transition: box-shadow .2s;
   transition: box-shadow .2s,-webkit-box-shadow .2s;
+  width: 100%;
   cursor: pointer;
 
   .job-title {

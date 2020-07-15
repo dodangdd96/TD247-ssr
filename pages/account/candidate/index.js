@@ -4,6 +4,7 @@ import levera from 'hocs/whoami';
 import axios from 'axios';
 import { UserOutlined, LockOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
+import Notification from 'component/common/Notification.js';
 
 const FormItem = Form.Item;
 
@@ -25,21 +26,24 @@ class Account extends Component {
       Cookies.set('login_jwt', res.data.token);
       let user = {
         accessToken: res.data.token,
-        name: res.data.account.user_name,
-        uid: res.data.account.id
+        user_name: res.data.account.user_name,
+        id: res.data.account.id,
+        email: res.data.account.email,
+        role: res.data.account.role,
+        phone_number: res.data.account.phone_number
       }
       const dataToSave = JSON.stringify(user);
       localStorage.setItem('current_user', dataToSave);
       window.location.replace('/manage');
     } else {
       this.setState({ loading: false });
-      message.error(res.data.message || 'Lỗi không xác định');
+      Notification.error(res.data.message || 'Lỗi không xác định');
     }
   };
 
   handleErr = (err) => {
     this.setState({ loading: false });
-    message.error('Lỗi không xác định');
+    Notification.error('Lỗi không xác định');
     console.log(err)
   };
 

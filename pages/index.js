@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Input, Button, Select, Row, Col } from 'antd';
+import { Input, Button, Select } from 'antd';
 import levera from '../hocs/whoami';
 import { SearchOutlined, RocketOutlined } from '@ant-design/icons';
 import WorkItem from 'component/WorkItem';
@@ -31,6 +31,7 @@ class Home extends Component {
   };
 
   render() {
+    const { listJobs } = this.props;
     return (
       <div className="landing-page-container">
         <div className="filter">
@@ -66,26 +67,61 @@ class Home extends Component {
           </div>
           <div className="box" style={{ height: 300, marginTop: 15 }}>
             <div className="title"><RocketOutlined style={{ marginRight: 5 }} />VIỆC LÀM CẦN TUYỂN GẤP</div>
-            <div style={{ padding: 8}}>
-              <Row>
-                <Col span={8}>
-                  <WorkItem/>
-                </Col>
-                <Col span={8}>
-                  <WorkItem/>
-                </Col>
-                <Col span={8}>
-                  <WorkItem/>
-                </Col>
-              </Row>
+            <div style={{ paddingTop: 10, flexWrap: 'wrap', display: 'flex' }}>
+              {listJobs.map((job, index) => (
+                <div style={{
+                  display: 'flex',
+                  border: "1px solid #e9e9e9",
+                  borderRadius: 4,
+                  flexWrap: 'wrap',
+                  margin: '0px 5px 5px 5px',
+                  width: "32%"
+                  }}
+                  key={index}
+                >
+                  <WorkItem job={job} key={index}/>
+                </div>
+              ))}
             </div>
           </div>
           <div className="box" style={{ height: 600, marginTop: 15 }}>
             <div className="title"><RocketOutlined style={{ marginRight: 5}} />CÔNG VIỆC LƯƠNG CAO</div>
+            <div style={{ paddingTop: 10, flexWrap: 'wrap', display: 'flex' }}>
+              {listJobs.map((job, index) => (
+                <div style={{
+                  display: 'flex',
+                  border: "1px solid #e9e9e9",
+                  borderRadius: 4,
+                  flexWrap: 'wrap',
+                  margin: '0px 5px 5px 5px',
+                  width: "32%"
+                  }}
+                  key={index}
+                >
+                  <WorkItem job={job} key={index}/>
+                </div>
+              ))}
+            </div>
           </div>
           <div style={{height: 600, marginTop: 10, display: "flex" }}>
             <div className="box" style={{ width: "60%" }}>
             <div className="title"><RocketOutlined style={{ marginRight: 5}} />CÔNG VIỆC HOT</div>
+            <div style={{ paddingTop: 10, flexWrap: 'wrap', display: 'flex' }}>
+              {listJobs.map((job, index) => (
+                <div style={{
+                  display: 'flex',
+                  border: "1px solid #e9e9e9",
+                  borderRadius: 4,
+                  flexWrap: 'wrap',
+                  margin: '0px 5px 5px 5px',
+                  width: "47%"
+                  }}
+                  key={index}
+                >
+                  <WorkItem job={job} key={index}/>
+                </div>
+              ))}
+            </div>
             </div>
             <div className="box" style={{ width: "40%", marginLeft: 15 }}>
             <div className="title"><RocketOutlined style={{ marginRight: 5}} />CÔNG TY</div>
@@ -99,9 +135,10 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
+const mapStateToProps = ({ user, jobs }) => ({
   user: user.user,
-  accessToken: user.accessToken
+  accessToken: user.accessToken,
+  listJobs: jobs.list_jobs
 });
 
 export default connect(mapStateToProps, { fetchListJobPost })(levera(Home));

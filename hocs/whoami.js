@@ -12,8 +12,9 @@ const whoami = ChildComponent => {
 
   @withRouter
   class HigherOrderComponent extends Component {
+
     render() {
-      const { router, collapsed } = this.props;
+      const { router, collapsed, user_name, role } = this.props;
       let url = router;
       let checkNav = typeof url !== 'undefined'
                     && (url.pathname !== '/' 
@@ -33,7 +34,7 @@ const whoami = ChildComponent => {
             <meta property="og:title" content="Levera Pancake" />
             <link href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.1.1/antd.min.css" rel="stylesheet"></link>
           </Head>
-            {!checkNav && <Navbar pathname={url.pathname}/>}
+            {!checkNav && <Navbar pathname={url.pathname} user_name={user_name} role={role}/>}
             {checkNav && <NavigationMenu  pathname={url.pathname}/>}
             {checkNav && <Header
               style={{ left: collapsed ? 80 : 240, width: collapsed ? 'calc(100% - 80px)' : 'calc(100% - 240px)', height: 50 }}
@@ -56,7 +57,7 @@ const whoami = ChildComponent => {
   }
 
 	const mapStateToProps = ({ navigation }) => ({
-    collapsed: navigation.collapsed
+    collapsed: navigation.collapsed,
   });
 
   const Extended = connect(
@@ -67,10 +68,6 @@ const whoami = ChildComponent => {
   Extended.getInitialProps = async ctx => {
     const { store, req, isServer, query } = ctx;
     let user = getUserFromRequest(req);
-
-    // if (isServer && user) {
-    //   await store.dispatch(fetchListCustomerCredit(user.accessToken));
-    // }
     const childProps = ChildComponent.getInitialProps ? await ChildComponent.getInitialProps(ctx, user && user.accessToken) : {};
 
     return { ...childProps, isServer, ...user, ...query  };

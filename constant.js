@@ -16,6 +16,7 @@ export const FETCH_LIST_SAVED_JOB = "FETCH_LIST_SAVED_JOB";
 export const CREATE_SAVED_JOB = "CREATE_SAVED_JOB";
 export const FETCH_LIST_APPLIED = "FETCH_LIST_APPLIED";
 export const CREATE_APPLIED = "CREATE_APPLIED";
+export const CLEAR_JOB = 'CLEAR_JOB';
 
 //file
 export const CREATE_FILE = "CREATE_FILE";
@@ -24,7 +25,7 @@ export const FETCH_FILE = "FETCH_FILE";
 export const FETCH_LIST_FILE = "FETCH_LIST_FILE";
 export const FETCH_LIST_SAVED_FILE = "FETCH_LIST_SAVED_FILE";
 export const CREATE_SAVED_FILE = "CREATE_SAVED_FILE";
-
+export const FETCH_FILE_BY_USER = "FETCH_FILE_BY_USER";
 
 
 

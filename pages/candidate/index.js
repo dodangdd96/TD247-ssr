@@ -5,10 +5,21 @@ import { SearchOutlined, RocketOutlined } from '@ant-design/icons';
 import CandidateItem from 'component/CandidateItem';
 import Analytic from 'component/Analytic';
 import Footer from 'component/Footer';
+import { fetchListFile } from 'actions';
+import { connect } from 'react-redux';
 import { listWork, listPosition } from 'tools';
 
 const Option = Select.Option
 class Candidate extends Component {
+  static async getInitialProps(ctx, accessToken) {
+    let { isServer, store: { dispatch } } = ctx;
+    if (isServer) {
+      await dispatch(fetchListFile(accessToken, {}));
+    } else {
+      await dispatch(fetchListFile(accessToken, {}));
+    }
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -21,6 +32,7 @@ class Candidate extends Component {
   };
 
   render() {
+    const { listFile } = this.props;
     return (
       <div className="landing-page-container">
         <div className="filter-adv">
@@ -47,7 +59,9 @@ class Candidate extends Component {
           <div className="box" style={{ height: 600, marginTop: 15 }}>
             <div className="title"><RocketOutlined style={{ marginRight: 5}} />HỒ SƠ ỨNG TUYỂN MỚI NHẤT</div>
             <div style={{ padding: 20 }}>
-              <CandidateItem/>
+              {listFile.map((file, index) => (
+                <CandidateItem file={file} key={index}/>
+              ))}
             </div>
           </div>
           <Analytic/>
@@ -57,4 +71,13 @@ class Candidate extends Component {
     );
   }
 }
-export default levera(Candidate);
+
+const mapStateToProps = ({ user, file }) => ({
+  user: user.user,
+  accessToken: user.accessToken,
+  listFile: file.list_file
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchListFile })(levera(Candidate));

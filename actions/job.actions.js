@@ -9,7 +9,8 @@ import {
   FETCH_LIST_SAVED_JOB,
   CREATE_SAVED_JOB,
   FETCH_LIST_APPLIED,
-  CREATE_APPLIED
+  CREATE_APPLIED,
+  CLEAR_JOB,
 } from '../constant';
   
 export const fetchListJobPost = (accessToken, params = {}) => dispatch => {
@@ -85,8 +86,8 @@ export const updateJobPost = (accessToken, job_post) => dispatch => {
     )
 }
 
-export const fetchListSavedJob = (accessToken, params = {}) => dispatch => {
-  const url = `${API_URL}/saved_job?access_token=${accessToken}`
+export const fetchListSavedJob = (accessToken, user_id, params = {}) => dispatch => {
+  const url = `${API_URL}/saved_job?user_id=${user_id}&access_token=${accessToken}`
   return axios.get(url, { params })
     .then(res => {
       if (res.data.success) {
@@ -121,8 +122,8 @@ export const createSavedJob = (accessToken, saved_job) => dispatch => {
     )
 }
 
-export const fetchListApplied = (accessToken, params = {}) => dispatch => {
-  const url = `${API_URL}/applied?access_token=${accessToken}`
+export const fetchListApplied = (accessToken, user_id, params = {}) => dispatch => {
+  const url = `${API_URL}/applied?user_id=${user_id}&access_token=${accessToken}`
   return axios.get(url, { params })
     .then(res => {
       if (res.data.success) {
@@ -138,10 +139,10 @@ export const fetchListApplied = (accessToken, params = {}) => dispatch => {
     )
 }
 
-export const createApplied = (accessToken, saved_job) => dispatch => {
+export const createApplied = (accessToken, applied) => dispatch => {
   const url = `${API_URL}/applied?access_token=${accessToken}`
 
-  return axios.post(url, { saved_job })
+  return axios.post(url, { applied })
     .then(res => {
       if (res.data.success) {
         dispatch({
@@ -156,3 +157,5 @@ export const createApplied = (accessToken, saved_job) => dispatch => {
       console.log(err)
     )
 }
+
+export const clearJob = () => ({ type: CLEAR_JOB });

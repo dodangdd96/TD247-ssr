@@ -6,6 +6,8 @@ import ContainerLayout from 'layout/ContainerLayout';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { fetchListJobPost } from 'actions';
+import { formatDateTime } from 'tools';
+import Router from 'next/router';
 
 const { RangePicker } = DatePicker;
 
@@ -81,7 +83,7 @@ class JobPosts extends Component {
         position: item.position,
         province: item.province,
         salary: item.wage,
-        period: item.period
+        period: formatDateTime(7, item.period, true)
       }
     })
     return data;
@@ -119,6 +121,10 @@ class JobPosts extends Component {
       params.endDate = undefined;
     }
 		this.fetchListJobPost(params);
+  }
+
+  onRowClick = (record) => {
+    Router.push(`/employer-recruitment/post?jobId=${record.key}`)
   }
 
   render() {

@@ -35,9 +35,12 @@ const checkAuth = (req, res, next) => {
     if (checkAccessToken(req.cookies.login_jwt)) {
       const data = jwtDecode(req.cookies.login_jwt);
       req.user = {
-        name: data.user_name,
+        user_name: data.user_name,
         accessToken: req.cookies.login_jwt,
-        uid: data.id,
+        id: data.id,
+        role: data.role,
+        email: data.email,
+        phone_number: data.phone_number
       }
       return next();
     } else return res.redirect('/logout');

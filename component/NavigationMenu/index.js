@@ -63,7 +63,7 @@ class NavigationMenu extends Component {
             </Link>
 					</MenuItem>
           <MenuItem key="/files">
-            <Link href={"/files"}>
+            <Link href={`/files?userId=${user.id}`}>
               <a>
                 <SolutionOutlined />
 						    <span>Quản lý hồ sơ</span>

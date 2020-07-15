@@ -3,20 +3,34 @@ import { InputNumber, Input, Button, Select, DatePicker } from 'antd';
 import levera from 'hocs/whoami';
 import { listWork, listPosition } from 'tools';
 import ContainerLayout from 'layout/ContainerLayout';
-import { fetchJobPost, updateJobPost, createJobPost } from 'actions';
+import { fetchJobPost, updateJobPost, createJobPost, clearJob } from 'actions';
 import { connect } from 'react-redux';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
+import Router from 'next/router';
 
 const Option = Select.Option;
 const { TextArea } = Input;
 
 class Post extends Component {
+  static async getInitialProps(ctx, accessToken) {
+    let { isServer, store: { dispatch }, query } = ctx;
+    if (query.jobId) {
+      if (isServer) {
+        await dispatch(fetchJobPost(accessToken, query.jobId ));
+      } else {
+        await dispatch(fetchJobPost(accessToken, query.jobId ));
+      }
+    } else {
+      await dispatch(clearJob())
+    }
+    
+  }
   constructor(props) {
     super(props);
-
     this.state ={
-      currJobPost: {}
+      currJobPost: props.job,
+      type: props.job.id ? "update" : "create"
     }
   }
 
@@ -32,16 +46,22 @@ class Post extends Component {
   }
 
   onHadleCreatePost = () => {
-    const { createJobPost, accessToken } = this.props;
-    createJobPost(accessToken, this.state.currJobPost);
+    const { createJobPost, accessToken, user, updateJobPost } = this.props;
+    const { currJobPost, type } = this.state;
+    if (type == "create") {
+      createJobPost(accessToken, this.state.currJobPost).then(res => {
+        if(res) Router.push(`/employer-recruitment/saved?userId=${user.id}`)
+      });
+    } else {
+      updateJobPost(accessToken, currJobPost)
+    }
   }
 
   onChangeDate = (date, dateString) => {
     const { currJobPost } = this.state;
     let cloneJobPost = cloneDeep(currJobPost);
     cloneJobPost["period"] = date;
-    this.setState({ currJobPost: currJobPost })
-    console.log(cloneJobPost)
+    this.setState({ currJobPost: cloneJobPost })
   }
 
   render() {
@@ -51,6 +71,7 @@ class Post extends Component {
     const level = ["Mới tốt nghiệp / Thực tập sinh", "Nhân viên", "Trưởng nhóm", "Trưởng phòng", "Phó giám đốc", "Giám đốc", "Tổng giám đốc điều hành", "Khác"];
     const typeOfWork = ["Toàn thời gian cố định", "Toàn thời gian tạm thời", "Bán thời gian cố định", "Bán thời gian tạm thời", "Theo hợp đồng / tư vấn", "Thực tập", "Khác"];
 
+    const { currJobPost } = this.state;
     return (
       <ContainerLayout>
         <div className="box" style={{ padding: "0px 10px 10px 20px", marginBottom: 20 }}>
@@ -62,6 +83,7 @@ class Post extends Component {
               <Input 
                 placeholder={"VD: Nhân viên kinh doang,.."}
                 onChange={e => this.onHandleJobPost('position', e.target.value)}
+                value={currJobPost.position}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
@@ -69,6 +91,7 @@ class Post extends Component {
               <Input
                 placeholder={"Nhập mã số"}
                 onChange={e => this.onHandleJobPost('index', e.target.value)}
+                value={currJobPost.index}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
@@ -77,6 +100,7 @@ class Post extends Component {
                   placeholder={"Chọn mức lương"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleJobPost('wage', e)}
+                  value={currJobPost.wage}
                 >
                   {salaryLevel.map(item => 
                     <Option value={item}>{item}</Option>
@@ -91,6 +115,7 @@ class Post extends Component {
                 placeholder={"Nhập số lượng"}
                 style={{ width: "100%" }}
                 onChange={e => this.onHandleJobPost('number_of_recruitment', e)}
+                value={currJobPost.number_of_recruitment}
               />
             </div>
             <div className="input-element" style={{ width: "33%" }}>
@@ -99,6 +124,7 @@ class Post extends Component {
                 placeholder={"Chọn số năm"}
                 style={{ width: "100%" }}
                 onChange={e => this.onHandleJobPost('level', e)}
+                value={currJobPost.level}
               >
                 {level.map(item => 
                   <Option value={item}>{item}</Option>
@@ -111,6 +137,7 @@ class Post extends Component {
                 placeholder={"Chọn địa điểm"}
                 style={{ width: "100%" }}
                 onChange={e => this.onHandleJobPost('type_of_work', e)}
+                value={currJobPost.type_of_work}
               >
                 {typeOfWork.map(item => 
                   <Option value={item}>{item}</Option>
@@ -125,6 +152,7 @@ class Post extends Component {
                 placeholder={"Chọn địa điểm"}
                 style={{ width: "100%" }}
                 onChange={e => this.onHandleJobPost('province', e)}
+                value={currJobPost.province}
               >
                 {listPosition.map(item => 
                   <Option value={item}>{item}</Option>
@@ -137,6 +165,7 @@ class Post extends Component {
                 placeholder={"Chọn ngành nghề"}
                 style={{ width: "100%" }}
                 onChange={e => this.onHandleJobPost('career', e)}
+                value={currJobPost.career}
               >
                 {listWork.map(item => 
                   <Option value={item}>{item}</Option>
@@ -148,12 +177,14 @@ class Post extends Component {
             <div className="title-element">Mô tả công việc:</div>
             <TextArea
               onChange={e => this.onHandleJobPost('description', e.target.value)}
+              value={currJobPost.description}
             />
           </div>
           <div className="input-element">
             <div className="title-element">Quyền lợi được hưởng:</div>
             <TextArea
               onChange={e => this.onHandleJobPost('benefit', e.target.value)}
+              value={currJobPost.benefit}
             />
           </div> 
         </div>
@@ -166,6 +197,7 @@ class Post extends Component {
                   placeholder={"Chọn số năm"}
                   style={{ width: "100%" }}
                   onChange={e => this.onHandleJobPost('experience', e)}
+                  value={currJobPost.experience}
                 >
                 {yearsOfExperience.map(item => 
                   <Option value={item}>{item}</Option>
@@ -178,6 +210,7 @@ class Post extends Component {
                     placeholder={"Chọn số năm"}
                     style={{ width: "100%" }}
                     onChange={e => this.onHandleJobPost('degree', e)}
+                    value={currJobPost.degree}
                   >
                   {academicLevel.map(item => 
                     <Option value={item}>{item}</Option>
@@ -190,6 +223,7 @@ class Post extends Component {
                     placeholder={"Chọn giới tính"}
                     style={{ width: "100%" }}
                     onChange={e => this.onHandleJobPost('sex', e)}
+                    value={currJobPost.sex}
                   >
                     <Option value="Không yêu cầu">Không yêu cầu</Option>
                     <Option value="Nam">Nam</Option>
@@ -202,7 +236,7 @@ class Post extends Component {
               <div className="title-element">Thời hạn nộp hồ sơ:</div>
               <DatePicker
                 format="DD/MM/YYYY"
-                // value={debts.deal_date ? moment(debts.deal_date) : undefined}
+                value={currJobPost.period ? moment(currJobPost.period) : undefined}
                 placeholder="Chọn ngày" 
                 style={{ width: "100%" }}
                 onChange={this.onChangeDate}
@@ -214,6 +248,7 @@ class Post extends Component {
                 placeholder={"Chọn"}
                 style={{ width: "100%" }}
                 onChange={e => this.onHandleJobPost('language', e)}
+                value={currJobPost.language}
               >
                 <Option value="Tiếng việt">Tiếng việt</Option>
                 <Option value="Tiếng anh">Tiếng anh</Option>
@@ -226,12 +261,14 @@ class Post extends Component {
             <div className="title-element">Yêu cầu công việc:</div>
             <TextArea
               onChange={e => this.onHandleJobPost('job_requirements', e.target.value)}
+              value={currJobPost.job_requirements}
             />
           </div>
           <div className="input-element">
             <div className="title-element">Yêu cầu hồ sơ:</div>
             <TextArea
               onChange={e => this.onHandleJobPost('profile_required', e.target.value)}
+              value={currJobPost.profile_required}
             />
           </div> 
         </div>
@@ -242,6 +279,7 @@ class Post extends Component {
             <Input 
               placeholder={"Nhập tên"}
               onChange={e => this.onHandleJobPost('contact', e.target.value)}
+              value={currJobPost.contact}
             />
           </div>
           <div style={{ display: 'flex' }}>
@@ -250,6 +288,7 @@ class Post extends Component {
               <Input 
                 placeholder={"Nhập email"}
                 onChange={e => this.onHandleJobPost('email_contact', e.target.value)}
+                value={currJobPost.email_contact}
               />
             </div>
             <div className="input-element" style={{ flex: 1 }}>
@@ -257,6 +296,7 @@ class Post extends Component {
               <Input
                 placeholder={"Nhập SDT"}
                 onChange={e => this.onHandleJobPost('phone_number_contact', e.target.value)}
+                value={currJobPost.phone_number_contact}
               />
             </div>
           </div>
@@ -270,9 +310,11 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
+const mapStateToProps = ({ user, jobs }) => ({
   user: user.user,
-  accessToken: user.accessToken
+  accessToken: user.accessToken,
+  job: jobs.job,
+  clearJob
 });
 
 export default connect(mapStateToProps, { fetchJobPost, updateJobPost, createJobPost })(levera(Post));
